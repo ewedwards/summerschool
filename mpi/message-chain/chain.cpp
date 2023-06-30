@@ -29,19 +29,37 @@ int main(int argc, char *argv[])
     // TODO: Set source and destination ranks
     // TODO: Treat boundaries with MPI_PROC_NULL
 
+    if (myid == 0) {
+        source = MPI_PROC_NULL;
+        destination = myid + 1;
+    }
+    else if (myid == (ntasks - 1)) {
+        source = myid - 1;
+        destination = MPI_PROC_NULL;
+    }
+    else {
+        source = myid - 1;
+        destination = myid + 1;
+    }
+    
+    
     // Start measuring the time spent in communication
     MPI_Barrier(MPI_COMM_WORLD);
     t0 = MPI_Wtime();
-
+    
     // TODO: Send messages
+    MPI_Send(message.data(), size, MPI_INT, destination, myid + 1, MPI_COMM_WORLD);
 
     printf("Sender: %d. Sent elements: %d. Tag: %d. Receiver: %d\n",
            myid, size, myid + 1, destination);
 
     // TODO: Receive messages
-
-    printf("Receiver: %d. first element %d.\n",
-           myid, receiveBuffer[0]);
+    MPI_Recv(receiveBuffer.data(), size, MPI_INT, source, myid, MPI_COMM_WORLD, &status);
+    // Find how much data was received
+    int nrecv;    
+    MPI_Get_count(&status, MPI_INT, &nrecv);
+    printf("Receiver: %d. Received %d elements, the first of which is %d.\n",
+           myid, nrecv, receiveBuffer[0]);
 
     // Finalize measuring the time and print it out
     t1 = MPI_Wtime();

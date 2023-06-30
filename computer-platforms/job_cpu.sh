@@ -9,4 +9,4 @@
 #SBATCH --ntasks-per-node=4
 ##SBATCH --reservation=
 
-srun my_prog
+srun prog
