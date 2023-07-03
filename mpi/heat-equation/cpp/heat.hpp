@@ -11,18 +11,24 @@ struct ParallelData {
 
     ParallelData() {      // Constructor
 
-      // TODO start: query number of MPI tasks and store it in
+      // query number of MPI tasks and store it in
       // the size attribute of the class
+      MPI_Comm_size(MPI_COMM_WORLD, &size);
 
       // Query MPI rank of this task and store it in the rank attribute
       // Determine also up and down neighbours of this domain and store
       // them in nup and ndown attributes, remember to cope with
       // boundary domains appropriatly
+      MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-      nup =
-      ndown =
-
-      // TODO end
+      nup = rank - 1;
+      ndown = rank + 1;
+      if (nup < 0) {
+        nup = MPI_PROC_NULL;
+      }
+      if (ndown > size - 1) {
+        ndown = MPI_PROC_NULL;
+      }
 
     };
 

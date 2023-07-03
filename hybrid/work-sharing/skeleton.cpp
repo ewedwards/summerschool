@@ -12,10 +12,10 @@ int main(void)
         vecB[i] = vecA[i] * vecA[i];
     }
 
-    /* TODO:
-     *   Implement here a parallelized version of vector addition,
-     *   vecC = vecA + vecB
-     */
+    #pragma omp parallel for default(shared)
+    for (int i = 0; i < NX; i++) {
+        vecC[i] = vecA[i] + vecB[i];
+    }
 
     double sum = 0.0;
     /* Compute the check value */

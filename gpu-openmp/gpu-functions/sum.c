@@ -2,10 +2,9 @@
 
 #define NX 102400
 
-// TODO add declaration for target usage
+#pragma omp declare target
 double my_sum(double a, double b);
-
-// TODO end
+#pragma omp end declare target
 
 int main(void)
 {
